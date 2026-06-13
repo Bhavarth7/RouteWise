@@ -50,7 +50,7 @@ function Hero() {
     <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16">
       <div className="max-w-4xl w-full text-center mb-16">
         <h1
-          className="text-5xl md:text-7xl font-[family-name:var(--font-display)] leading-tight mb-6"
+          className="text-5xl md:text-7xl font-sans font-bold leading-tight mb-6"
           style={{ color: "var(--color-foreground)" }}
         >
           Stop choosing AI models manually.
@@ -89,7 +89,7 @@ function Hero() {
 
       {/* Live Workflow Trace Animation */}
       <div
-        className="w-full max-w-xl rounded-lg border p-6 font-[family-name:var(--font-mono)] text-sm"
+        className="w-full max-w-xl rounded-lg border p-6 font-mono text-sm"
         style={{
           background: "var(--color-surface)",
           borderColor: "var(--color-border)",
@@ -173,7 +173,7 @@ function Problem() {
   return (
     <section className="py-32 px-6">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-display)] text-center mb-20">
+        <h2 className="text-3xl md:text-4xl font-sans font-bold text-center mb-20">
           The problem with multi-model workflows
         </h2>
 
@@ -192,7 +192,7 @@ function Problem() {
             >
               Without RouteWise
             </p>
-            <div className="space-y-3 font-[family-name:var(--font-mono)] text-sm">
+            <div className="space-y-3 font-mono text-sm">
               {[
                 "Claude → wrong task",
                 "GPT → expensive for simple work",
@@ -223,7 +223,7 @@ function Problem() {
             >
               With RouteWise
             </p>
-            <div className="space-y-3 font-[family-name:var(--font-mono)] text-sm">
+            <div className="space-y-3 font-mono text-sm">
               {[
                 "Task → Decompose → Route → Execute",
                 "Best model per step, automatically",
@@ -272,7 +272,7 @@ function HowItWorks() {
   return (
     <section className="py-32 px-6">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-display)] text-center mb-6">
+        <h2 className="text-3xl md:text-4xl font-sans font-bold text-center mb-6">
           How it works
         </h2>
         <p
@@ -293,7 +293,7 @@ function HowItWorks() {
               }}
             >
               <div
-                className="text-2xl mb-4 font-[family-name:var(--font-mono)]"
+                className="text-2xl mb-4 font-mono"
                 style={{ color: "var(--color-accent)" }}
               >
                 {phase.icon}
@@ -359,7 +359,7 @@ function RoutingTrace() {
   return (
     <section className="py-32 px-6">
       <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-display)] text-center mb-6">
+        <h2 className="text-3xl md:text-4xl font-sans font-bold text-center mb-6">
           Real routing trace
         </h2>
         <p
@@ -371,7 +371,7 @@ function RoutingTrace() {
         </p>
 
         <div
-          className="rounded-lg border p-6 overflow-x-auto font-[family-name:var(--font-mono)] text-xs leading-relaxed"
+          className="rounded-lg border p-6 overflow-x-auto font-mono text-xs leading-relaxed"
           style={{
             background: "var(--color-surface)",
             borderColor: "var(--color-border)",
@@ -398,7 +398,7 @@ function Benchmarks() {
   return (
     <section className="py-32 px-6">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-display)] text-center mb-6">
+        <h2 className="text-3xl md:text-4xl font-sans font-bold text-center mb-6">
           Benchmarks
         </h2>
         <p
@@ -441,13 +441,13 @@ function Benchmarks() {
                   <td className="px-6 py-4" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
                     {row.approach}
                   </td>
-                  <td className="text-right px-6 py-4 font-[family-name:var(--font-mono)]" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
+                  <td className="text-right px-6 py-4 font-mono" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
                     {row.cost}
                   </td>
-                  <td className="text-right px-6 py-4 font-[family-name:var(--font-mono)]" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
+                  <td className="text-right px-6 py-4 font-mono" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
                     {row.time}
                   </td>
-                  <td className="text-right px-6 py-4 font-[family-name:var(--font-mono)]" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
+                  <td className="text-right px-6 py-4 font-mono" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
                     {row.completion}
                   </td>
                 </tr>
@@ -475,7 +475,7 @@ function Integrations() {
   return (
     <section className="py-32 px-6">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-display)] mb-6">
+        <h2 className="text-3xl md:text-4xl font-sans font-bold mb-6">
           Works where you work
         </h2>
         <p className="mb-16" style={{ color: "var(--color-muted)" }}>
@@ -508,7 +508,7 @@ function OpenSource() {
   return (
     <section className="py-32 px-6">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-display)] mb-6">
+        <h2 className="text-3xl md:text-4xl font-sans font-bold mb-6">
           Open source. Apache 2.0.
         </h2>
         <p
@@ -528,7 +528,7 @@ function OpenSource() {
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div
-                className="text-2xl font-semibold font-[family-name:var(--font-mono)]"
+                className="text-2xl font-semibold font-mono"
                 style={{ color: "var(--color-accent)" }}
               >
                 {stat.value}
@@ -587,7 +587,7 @@ function Roadmap() {
   return (
     <section className="py-32 px-6">
       <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-[family-name:var(--font-display)] text-center mb-16">
+        <h2 className="text-3xl md:text-4xl font-sans font-bold text-center mb-16">
           Roadmap
         </h2>
 
