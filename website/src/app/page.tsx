@@ -7,27 +7,50 @@ import { useEffect, useState } from "react";
 const traceSteps = [
   { label: "Classify", detail: "reasoning → code-gen → writing", delay: 0 },
   { label: "Plan", detail: "3 steps decomposed", delay: 600 },
-  {
-    label: "Route Step 1",
-    detail: "→ Claude Sonnet 4.6",
-    model: "claude",
-    delay: 1200,
-  },
-  {
-    label: "Route Step 2",
-    detail: "→ GPT-4.1",
-    model: "openai",
-    delay: 1800,
-  },
-  {
-    label: "Route Step 3",
-    detail: "→ Gemini 3.5 Flash",
-    model: "vertex",
-    delay: 2400,
-  },
+  { label: "Route Step 1", detail: "→ Claude Sonnet 4.6", model: "claude", delay: 1200 },
+  { label: "Route Step 2", detail: "→ GPT-4.1", model: "openai", delay: 1800 },
+  { label: "Route Step 3", detail: "→ Gemini 3.5 Flash", model: "vertex", delay: 2400 },
   { label: "Evaluate", detail: "3/3 passed", delay: 3000 },
   { label: "Trace Generated", detail: "$0.0087 · 4.2s", delay: 3600 },
 ];
+
+// ─── Sticky Navigation ───────────────────────────────────────────────────────
+
+function Nav() {
+  return (
+    <nav
+      className="fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md"
+      style={{
+        background: "rgba(10, 13, 18, 0.85)",
+        borderColor: "var(--color-border)",
+      }}
+    >
+      <div className="max-w-5xl mx-auto flex items-center justify-between px-6 py-3">
+        <div className="flex items-center gap-6">
+          <a href="/" className="font-semibold text-sm tracking-tight" style={{ color: "var(--color-foreground)" }}>
+            RouteWise
+          </a>
+          <div className="hidden md:flex items-center gap-5 text-sm" style={{ color: "var(--color-muted)" }}>
+            <a href="#how-it-works" className="hover:text-white transition-colors">How it works</a>
+            <a href="#benchmarks" className="hover:text-white transition-colors">Benchmarks</a>
+            <a href="#integrations" className="hover:text-white transition-colors">Integrations</a>
+            <a href="https://github.com/Bhavarth7/RouteWise#quick-start" className="hover:text-white transition-colors">Docs</a>
+          </div>
+        </div>
+        <a
+          href="https://github.com/Bhavarth7/RouteWise"
+          className="flex items-center gap-2 px-4 py-1.5 rounded-md border text-sm font-medium transition-all hover:opacity-80"
+          style={{ borderColor: "var(--color-border)", color: "var(--color-foreground)" }}
+        >
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </nav>
+  );
+}
 
 // ─── Hero Section ────────────────────────────────────────────────────────────
 
@@ -37,126 +60,71 @@ function Hero() {
 
   useEffect(() => {
     const inputTimer = setTimeout(() => setInputTyped(true), 400);
-    const timers = traceSteps.map((step, i) =>
-      setTimeout(() => setVisibleSteps(i + 1), step.delay + 1200)
+    const timers = traceSteps.map((_, i) =>
+      setTimeout(() => setVisibleSteps(i + 1), traceSteps[i]!.delay + 1200)
     );
-    return () => {
-      clearTimeout(inputTimer);
-      timers.forEach(clearTimeout);
-    };
+    return () => { clearTimeout(inputTimer); timers.forEach(clearTimeout); };
   }, []);
 
   return (
-    <section className="min-h-screen flex flex-col items-center justify-center px-6 pt-24 pb-16">
-      <div className="max-w-4xl w-full text-center mb-16">
-        <h1
-          className="text-5xl md:text-7xl font-sans font-bold leading-tight mb-6"
-          style={{ color: "var(--color-foreground)" }}
-        >
-          Stop choosing AI models manually.
+    <section className="flex flex-col items-center px-6 pt-32 pb-20">
+      {/* Copy block — tight, not full viewport */}
+      <div className="max-w-2xl w-full text-center mb-8">
+        <h1 className="text-4xl md:text-5xl font-semibold leading-[1.15] tracking-tight mb-5" style={{ color: "var(--color-foreground)" }}>
+          Stop choosing AI models<br />manually.
         </h1>
-        <p
-          className="text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
-          style={{ color: "var(--color-muted)" }}
-        >
-          RouteWise decomposes workflows, selects the best model and tools for
-          each step, evaluates results, and generates a complete execution
-          trace.
+        <p className="text-base md:text-lg leading-relaxed max-w-lg mx-auto" style={{ color: "var(--color-muted)" }}>
+          RouteWise decomposes workflows into steps, selects the best model for each, evaluates results, and generates a complete execution trace.
         </p>
-        <div className="flex gap-4 justify-center mt-10">
+        <div className="flex gap-3 justify-center mt-7">
           <a
             href="https://github.com/Bhavarth7/RouteWise#quick-start"
-            className="px-6 py-3 rounded-md font-medium text-sm transition-all hover:opacity-90"
-            style={{
-              background: "var(--color-accent)",
-              color: "var(--color-background)",
-            }}
+            className="px-5 py-2.5 rounded-md font-medium text-sm transition-all hover:opacity-90"
+            style={{ background: "var(--color-accent)", color: "var(--color-background)" }}
           >
             Get Started
           </a>
           <a
             href="https://github.com/Bhavarth7/RouteWise"
-            className="px-6 py-3 rounded-md font-medium text-sm border transition-all hover:opacity-80"
-            style={{
-              borderColor: "var(--color-border)",
-              color: "var(--color-foreground)",
-            }}
+            className="px-5 py-2.5 rounded-md font-medium text-sm border transition-all hover:opacity-80"
+            style={{ borderColor: "var(--color-border)", color: "var(--color-foreground)" }}
           >
             View on GitHub
           </a>
         </div>
       </div>
 
-      {/* Live Workflow Trace Animation */}
+      {/* Terminal card — pulled tight to CTAs */}
       <div
-        className="w-full max-w-xl rounded-lg border p-6 font-mono text-sm"
-        style={{
-          background: "var(--color-surface)",
-          borderColor: "var(--color-border)",
-        }}
+        className="w-full max-w-xl rounded-lg border p-5 font-mono text-sm"
+        style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}
       >
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-3 h-3 rounded-full bg-red-500/60" />
-          <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
-          <div className="w-3 h-3 rounded-full bg-green-500/60" />
-          <span
-            className="ml-3 text-xs"
-            style={{ color: "var(--color-muted)" }}
-          >
-            routewise run
-          </span>
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-500/50" />
+          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/50" />
+          <div className="w-2.5 h-2.5 rounded-full bg-green-500/50" />
+          <span className="ml-2 text-xs" style={{ color: "var(--color-muted)" }}>routewise run</span>
         </div>
 
-        <div className="mb-4">
+        <div className="mb-3">
           <span style={{ color: "var(--color-accent)" }}>$ </span>
-          <span
-            className={inputTyped ? "" : "opacity-0"}
-            style={{ color: "var(--color-foreground)" }}
-          >
+          <span className={inputTyped ? "" : "opacity-0"} style={{ color: "var(--color-foreground)" }}>
             routewise run &quot;Build an AI support agent&quot;
           </span>
-          {!inputTyped && (
-            <span
-              className="animate-blink"
-              style={{ color: "var(--color-accent)" }}
-            >
-              █
-            </span>
-          )}
+          {!inputTyped && <span className="animate-blink" style={{ color: "var(--color-accent)" }}>█</span>}
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-1.5">
           {traceSteps.map((step, i) => (
             <div
               key={step.label}
-              className={`flex items-center gap-3 transition-all duration-300 ${
-                i < visibleSteps
-                  ? "opacity-100 translate-y-0"
-                  : "opacity-0 translate-y-2"
-              }`}
+              className={`flex items-center gap-3 transition-all duration-300 ${i < visibleSteps ? "opacity-100 translate-y-0" : "opacity-0 translate-y-1"}`}
             >
-              <span
-                className="w-4 text-center"
-                style={{
-                  color:
-                    i < visibleSteps
-                      ? "var(--color-accent)"
-                      : "var(--color-muted)",
-                }}
-              >
+              <span className="w-4 text-center" style={{ color: i < visibleSteps ? "var(--color-accent)" : "var(--color-muted)" }}>
                 {i < visibleSteps ? "✓" : "·"}
               </span>
-              <span style={{ color: "var(--color-foreground)" }}>
-                {step.label}
-              </span>
-              <span
-                className="text-xs"
-                style={{
-                  color: step.model
-                    ? "var(--color-accent-secondary)"
-                    : "var(--color-muted)",
-                }}
-              >
+              <span style={{ color: "var(--color-foreground)" }}>{step.label}</span>
+              <span className="text-xs" style={{ color: step.model ? "var(--color-accent-secondary)" : "var(--color-muted)" }}>
                 {step.detail}
               </span>
             </div>
@@ -171,71 +139,32 @@ function Hero() {
 
 function Problem() {
   return (
-    <section className="py-32 px-6">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-sans font-bold text-center mb-20">
+    <section className="py-24 px-6">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-14 tracking-tight">
           The problem with multi-model workflows
         </h2>
 
-        <div className="grid md:grid-cols-2 gap-16 items-center">
-          {/* Before: Chaos */}
-          <div
-            className="rounded-lg border p-8"
-            style={{
-              background: "var(--color-surface)",
-              borderColor: "var(--color-border)",
-            }}
-          >
-            <p
-              className="text-xs uppercase tracking-wider mb-6"
-              style={{ color: "var(--color-muted)" }}
-            >
-              Without RouteWise
-            </p>
-            <div className="space-y-3 font-mono text-sm">
-              {[
-                "Claude → wrong task",
-                "GPT → expensive for simple work",
-                "Cursor → no routing visibility",
-                "MCP → manual tool switching",
-                "Scripts → fragile, no traces",
-              ].map((line) => (
+        <div className="grid md:grid-cols-2 gap-6">
+          <div className="rounded-lg border p-6" style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}>
+            <p className="text-xs uppercase tracking-wider mb-5 font-medium" style={{ color: "var(--color-muted)" }}>Without RouteWise</p>
+            <div className="space-y-2.5 font-mono text-sm">
+              {["Claude → wrong task", "GPT → expensive for simple work", "Cursor → no routing visibility", "MCP → manual tool switching", "Scripts → fragile, no traces"].map((line) => (
                 <div key={line} className="flex items-center gap-2">
-                  <span className="text-red-400">✗</span>
+                  <span className="text-red-400/80">✗</span>
                   <span style={{ color: "var(--color-muted)" }}>{line}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* After: RouteWise */}
-          <div
-            className="rounded-lg border p-8"
-            style={{
-              background: "var(--color-surface)",
-              borderColor: "var(--color-accent)",
-              boxShadow: "0 0 40px -12px rgba(92, 225, 230, 0.15)",
-            }}
-          >
-            <p
-              className="text-xs uppercase tracking-wider mb-6"
-              style={{ color: "var(--color-accent)" }}
-            >
-              With RouteWise
-            </p>
-            <div className="space-y-3 font-mono text-sm">
-              {[
-                "Task → Decompose → Route → Execute",
-                "Best model per step, automatically",
-                "Cost + latency tracked per step",
-                "Full trace: why each model was chosen",
-                "Works in Claude Code, Cursor, MCP",
-              ].map((line) => (
+          <div className="rounded-lg border p-6" style={{ background: "var(--color-surface)", borderColor: "var(--color-accent)", boxShadow: "0 0 30px -10px rgba(92, 225, 230, 0.12)" }}>
+            <p className="text-xs uppercase tracking-wider mb-5 font-medium" style={{ color: "var(--color-accent)" }}>With RouteWise</p>
+            <div className="space-y-2.5 font-mono text-sm">
+              {["Task → Decompose → Route → Execute", "Best model per step, automatically", "Cost + latency tracked per step", "Full trace: why each model was chosen", "Works in Claude Code, Cursor, MCP"].map((line) => (
                 <div key={line} className="flex items-center gap-2">
                   <span style={{ color: "var(--color-accent)" }}>✓</span>
-                  <span style={{ color: "var(--color-foreground)" }}>
-                    {line}
-                  </span>
+                  <span style={{ color: "var(--color-foreground)" }}>{line}</span>
                 </div>
               ))}
             </div>
@@ -250,61 +179,25 @@ function Problem() {
 
 function HowItWorks() {
   const phases = [
-    {
-      title: "Plan",
-      description: "Decompose task into ordered steps. Classify each step type.",
-      icon: "◇",
-    },
-    {
-      title: "Route",
-      description:
-        "Select best model per step within cost, latency, and quality constraints.",
-      icon: "→",
-    },
-    {
-      title: "Verify",
-      description:
-        "Execute, evaluate output quality, log full trace with costs and decisions.",
-      icon: "✓",
-    },
+    { title: "Plan", description: "Decompose task into ordered steps. Classify each step type.", icon: "01" },
+    { title: "Route", description: "Select best model per step within cost, latency, and quality constraints.", icon: "02" },
+    { title: "Verify", description: "Execute, evaluate output quality, log full trace with costs and decisions.", icon: "03" },
   ];
 
   return (
-    <section className="py-32 px-6">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-sans font-bold text-center mb-6">
-          How it works
-        </h2>
-        <p
-          className="text-center mb-20 max-w-xl mx-auto"
-          style={{ color: "var(--color-muted)" }}
-        >
+    <section id="how-it-works" className="py-24 px-6">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-4 tracking-tight">How it works</h2>
+        <p className="text-center mb-14 max-w-md mx-auto text-sm" style={{ color: "var(--color-muted)" }}>
           Three phases. Every step traceable. Every decision explainable.
         </p>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid md:grid-cols-3 gap-5">
           {phases.map((phase) => (
-            <div
-              key={phase.title}
-              className="rounded-lg border p-8"
-              style={{
-                background: "var(--color-surface)",
-                borderColor: "var(--color-border)",
-              }}
-            >
-              <div
-                className="text-2xl mb-4 font-mono"
-                style={{ color: "var(--color-accent)" }}
-              >
-                {phase.icon}
-              </div>
-              <h3 className="text-xl font-semibold mb-3">{phase.title}</h3>
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: "var(--color-muted)" }}
-              >
-                {phase.description}
-              </p>
+            <div key={phase.title} className="rounded-lg border p-6" style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}>
+              <div className="text-xs font-mono mb-3" style={{ color: "var(--color-accent)" }}>{phase.icon}</div>
+              <h3 className="text-base font-semibold mb-2">{phase.title}</h3>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--color-muted)" }}>{phase.description}</p>
             </div>
           ))}
         </div>
@@ -357,29 +250,15 @@ function RoutingTrace() {
 }`;
 
   return (
-    <section className="py-32 px-6">
-      <div className="max-w-5xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-sans font-bold text-center mb-6">
-          Real routing trace
-        </h2>
-        <p
-          className="text-center mb-12 max-w-xl mx-auto"
-          style={{ color: "var(--color-muted)" }}
-        >
-          Every run produces a structured trace. See exactly which model was
-          chosen, why, and what it cost.
+    <section className="py-24 px-6">
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-4 tracking-tight">Real routing trace</h2>
+        <p className="text-center mb-10 max-w-md mx-auto text-sm" style={{ color: "var(--color-muted)" }}>
+          Every run produces a structured trace. See exactly which model was chosen, why, and what it cost.
         </p>
 
-        <div
-          className="rounded-lg border p-6 overflow-x-auto font-mono text-xs leading-relaxed"
-          style={{
-            background: "var(--color-surface)",
-            borderColor: "var(--color-border)",
-          }}
-        >
-          <pre style={{ color: "var(--color-muted)" }}>
-            <code>{traceJson}</code>
-          </pre>
+        <div className="rounded-lg border p-5 overflow-x-auto font-mono text-xs leading-relaxed" style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}>
+          <pre style={{ color: "var(--color-muted)" }}><code>{traceJson}</code></pre>
         </div>
       </div>
     </section>
@@ -396,60 +275,45 @@ function Benchmarks() {
   ];
 
   return (
-    <section className="py-32 px-6">
+    <section id="benchmarks" className="py-24 px-6">
       <div className="max-w-4xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-sans font-bold text-center mb-6">
-          Benchmarks
-        </h2>
-        <p
-          className="text-center mb-12 max-w-xl mx-auto"
-          style={{ color: "var(--color-muted)" }}
-        >
-          Measured on a 7-step workflow: idea → plan → architecture → code →
-          tests → docs → launch post.
+        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-4 tracking-tight">Benchmarks</h2>
+        <p className="text-center mb-10 max-w-md mx-auto text-sm" style={{ color: "var(--color-muted)" }}>
+          Measured on a 7-step workflow: idea → plan → architecture → code → tests → docs → launch post.
         </p>
 
-        <div
-          className="rounded-lg border overflow-hidden"
-          style={{
-            background: "var(--color-surface)",
-            borderColor: "var(--color-border)",
-          }}
-        >
+        {/* Stat highlight card */}
+        <div className="grid grid-cols-3 gap-4 mb-6">
+          {[
+            { value: "78%", label: "cost reduction vs single model" },
+            { value: "3×", label: "faster than manual switching" },
+            { value: "94%", label: "task completion rate" },
+          ].map((stat) => (
+            <div key={stat.label} className="rounded-lg border p-4 text-center" style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}>
+              <div className="text-xl md:text-2xl font-semibold font-mono" style={{ color: "var(--color-accent)" }}>{stat.value}</div>
+              <div className="text-xs mt-1" style={{ color: "var(--color-muted)" }}>{stat.label}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Table */}
+        <div className="rounded-lg border overflow-hidden" style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}>
           <table className="w-full text-sm">
             <thead>
-              <tr
-                className="border-b"
-                style={{ borderColor: "var(--color-border)" }}
-              >
-                <th className="text-left px-6 py-4 font-medium" style={{ color: "var(--color-muted)" }}>Approach</th>
-                <th className="text-right px-6 py-4 font-medium" style={{ color: "var(--color-muted)" }}>Cost</th>
-                <th className="text-right px-6 py-4 font-medium" style={{ color: "var(--color-muted)" }}>Time</th>
-                <th className="text-right px-6 py-4 font-medium" style={{ color: "var(--color-muted)" }}>Completion</th>
+              <tr className="border-b" style={{ borderColor: "var(--color-border)" }}>
+                <th className="text-left px-5 py-3 font-medium text-xs" style={{ color: "var(--color-muted)" }}>Approach</th>
+                <th className="text-right px-5 py-3 font-medium text-xs" style={{ color: "var(--color-muted)" }}>Cost</th>
+                <th className="text-right px-5 py-3 font-medium text-xs" style={{ color: "var(--color-muted)" }}>Time</th>
+                <th className="text-right px-5 py-3 font-medium text-xs" style={{ color: "var(--color-muted)" }}>Completion</th>
               </tr>
             </thead>
             <tbody>
               {data.map((row) => (
-                <tr
-                  key={row.approach}
-                  className="border-b last:border-b-0"
-                  style={{
-                    borderColor: "var(--color-border)",
-                    background: row.highlight ? "rgba(92, 225, 230, 0.04)" : undefined,
-                  }}
-                >
-                  <td className="px-6 py-4" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
-                    {row.approach}
-                  </td>
-                  <td className="text-right px-6 py-4 font-mono" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
-                    {row.cost}
-                  </td>
-                  <td className="text-right px-6 py-4 font-mono" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
-                    {row.time}
-                  </td>
-                  <td className="text-right px-6 py-4 font-mono" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>
-                    {row.completion}
-                  </td>
+                <tr key={row.approach} className="border-b last:border-b-0" style={{ borderColor: "var(--color-border)", background: row.highlight ? "rgba(92, 225, 230, 0.03)" : undefined }}>
+                  <td className="px-5 py-3" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>{row.approach}</td>
+                  <td className="text-right px-5 py-3 font-mono" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>{row.cost}</td>
+                  <td className="text-right px-5 py-3 font-mono" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>{row.time}</td>
+                  <td className="text-right px-5 py-3 font-mono" style={{ color: row.highlight ? "var(--color-accent)" : "var(--color-foreground)" }}>{row.completion}</td>
                 </tr>
               ))}
             </tbody>
@@ -463,36 +327,19 @@ function Benchmarks() {
 // ─── Integrations Section ────────────────────────────────────────────────────
 
 function Integrations() {
-  const integrations = [
-    "Claude Code",
-    "Cursor",
-    "MCP",
-    "OpenAI",
-    "Anthropic",
-    "Vertex AI",
-  ];
+  const integrations = ["Claude Code", "Cursor", "MCP", "OpenAI", "Anthropic", "Vertex AI"];
 
   return (
-    <section className="py-32 px-6">
+    <section id="integrations" className="py-24 px-6">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-sans font-bold mb-6">
-          Works where you work
-        </h2>
-        <p className="mb-16" style={{ color: "var(--color-muted)" }}>
-          Native MCP server for Claude Code and Cursor. Standalone CLI for
-          terminal workflows.
+        <h2 className="text-2xl md:text-3xl font-semibold mb-4 tracking-tight">Works where you work</h2>
+        <p className="mb-10 text-sm" style={{ color: "var(--color-muted)" }}>
+          Native MCP server for Claude Code and Cursor. Standalone CLI for terminal workflows.
         </p>
 
-        <div className="flex flex-wrap justify-center gap-6">
+        <div className="flex flex-wrap justify-center gap-3">
           {integrations.map((name) => (
-            <div
-              key={name}
-              className="px-6 py-3 rounded-md border text-sm font-medium"
-              style={{
-                borderColor: "var(--color-border)",
-                color: "var(--color-foreground)",
-              }}
-            >
+            <div key={name} className="px-4 py-2 rounded-md border text-sm" style={{ borderColor: "var(--color-border)", color: "var(--color-foreground)" }}>
               {name}
             </div>
           ))}
@@ -506,20 +353,14 @@ function Integrations() {
 
 function OpenSource() {
   return (
-    <section className="py-32 px-6">
+    <section className="py-24 px-6">
       <div className="max-w-4xl mx-auto text-center">
-        <h2 className="text-3xl md:text-4xl font-sans font-bold mb-6">
-          Open source. Apache 2.0.
-        </h2>
-        <p
-          className="mb-12 max-w-lg mx-auto"
-          style={{ color: "var(--color-muted)" }}
-        >
-          RouteWise is built in public. Contribute providers, evaluators,
-          classification heuristics, or documentation.
+        <h2 className="text-2xl md:text-3xl font-semibold mb-4 tracking-tight">Open source. Apache 2.0.</h2>
+        <p className="mb-10 max-w-md mx-auto text-sm" style={{ color: "var(--color-muted)" }}>
+          RouteWise is built in public. Contribute providers, evaluators, classification heuristics, or documentation.
         </p>
 
-        <div className="flex flex-wrap justify-center gap-8 mb-12">
+        <div className="flex flex-wrap justify-center gap-6 mb-10">
           {[
             { label: "TypeScript", value: "Strict" },
             { label: "Tests", value: "125+" },
@@ -527,41 +368,19 @@ function OpenSource() {
             { label: "Models", value: "9" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
-              <div
-                className="text-2xl font-semibold font-mono"
-                style={{ color: "var(--color-accent)" }}
-              >
-                {stat.value}
-              </div>
-              <div
-                className="text-xs mt-1"
-                style={{ color: "var(--color-muted)" }}
-              >
-                {stat.label}
-              </div>
+              <div className="text-xl font-semibold font-mono" style={{ color: "var(--color-accent)" }}>{stat.value}</div>
+              <div className="text-xs mt-1" style={{ color: "var(--color-muted)" }}>{stat.label}</div>
             </div>
           ))}
         </div>
 
         <a
           href="https://github.com/Bhavarth7/RouteWise"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-md border text-sm font-medium transition-all hover:opacity-80"
-          style={{
-            borderColor: "var(--color-border)",
-            color: "var(--color-foreground)",
-          }}
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-md border text-sm font-medium transition-all hover:opacity-80"
+          style={{ borderColor: "var(--color-border)", color: "var(--color-foreground)" }}
         >
-          <svg
-            className="w-5 h-5"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              fillRule="evenodd"
-              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-              clipRule="evenodd"
-            />
+          <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
           </svg>
           Star on GitHub
         </a>
@@ -585,49 +404,34 @@ function Roadmap() {
   ];
 
   return (
-    <section className="py-32 px-6">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl md:text-4xl font-sans font-bold text-center mb-16">
-          Roadmap
-        </h2>
+    <section className="py-24 px-6">
+      <div className="max-w-2xl mx-auto">
+        <h2 className="text-2xl md:text-3xl font-semibold text-center mb-10 tracking-tight">Roadmap</h2>
 
-        <div className="relative">
-          {/* Vertical line */}
-          <div
-            className="absolute left-4 top-0 bottom-0 w-px"
-            style={{ background: "var(--color-border)" }}
-          />
+        {/* Contained card with timeline */}
+        <div className="rounded-lg border p-6" style={{ background: "var(--color-surface)", borderColor: "var(--color-border)" }}>
+          <div className="relative">
+            <div className="absolute left-[11px] top-2 bottom-2 w-px" style={{ background: "var(--color-border)" }} />
 
-          <div className="space-y-6">
-            {items.map((item) => (
-              <div key={item.label} className="flex items-center gap-4 pl-1">
-                <div
-                  className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold z-10"
-                  style={{
-                    background: item.done
-                      ? "var(--color-accent)"
-                      : "var(--color-surface)",
-                    color: item.done
-                      ? "var(--color-background)"
-                      : "var(--color-muted)",
-                    border: item.done
-                      ? "none"
-                      : "1px solid var(--color-border)",
-                  }}
-                >
-                  {item.done ? "✓" : "·"}
+            <div className="space-y-4">
+              {items.map((item) => (
+                <div key={item.label} className="flex items-center gap-3 relative">
+                  <div
+                    className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-semibold z-10 shrink-0"
+                    style={{
+                      background: item.done ? "var(--color-accent)" : "var(--color-background)",
+                      color: item.done ? "var(--color-background)" : "var(--color-muted)",
+                      border: item.done ? "none" : "1px solid var(--color-border)",
+                    }}
+                  >
+                    {item.done ? "✓" : "·"}
+                  </div>
+                  <span className="text-sm" style={{ color: item.done ? "var(--color-foreground)" : "var(--color-muted)" }}>
+                    {item.label}
+                  </span>
                 </div>
-                <span
-                  style={{
-                    color: item.done
-                      ? "var(--color-foreground)"
-                      : "var(--color-muted)",
-                  }}
-                >
-                  {item.label}
-                </span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -639,28 +443,17 @@ function Roadmap() {
 
 function Footer() {
   return (
-    <footer
-      className="py-12 px-6 border-t"
-      style={{ borderColor: "var(--color-border)" }}
-    >
+    <footer className="py-10 px-6 border-t" style={{ borderColor: "var(--color-border)" }}>
       <div className="max-w-5xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
         <div className="flex items-center gap-2">
-          <span className="font-semibold">RouteWise</span>
+          <span className="font-semibold text-sm">RouteWise</span>
           <span style={{ color: "var(--color-muted)" }}>·</span>
-          <span className="text-sm" style={{ color: "var(--color-muted)" }}>
-            Open-source AI workflow router
-          </span>
+          <span className="text-xs" style={{ color: "var(--color-muted)" }}>Open-source AI workflow router</span>
         </div>
-        <div className="flex gap-6 text-sm" style={{ color: "var(--color-muted)" }}>
-          <a href="https://github.com/Bhavarth7/RouteWise" className="hover:underline">
-            GitHub
-          </a>
-          <a href="https://github.com/Bhavarth7/RouteWise#quick-start" className="hover:underline">
-            Docs
-          </a>
-          <a href="https://github.com/Bhavarth7/RouteWise/blob/main/LICENSE" className="hover:underline">
-            Apache 2.0
-          </a>
+        <div className="flex gap-5 text-xs" style={{ color: "var(--color-muted)" }}>
+          <a href="https://github.com/Bhavarth7/RouteWise" className="hover:text-white transition-colors">GitHub</a>
+          <a href="https://github.com/Bhavarth7/RouteWise#quick-start" className="hover:text-white transition-colors">Docs</a>
+          <a href="https://github.com/Bhavarth7/RouteWise/blob/main/LICENSE" className="hover:text-white transition-colors">Apache 2.0</a>
         </div>
       </div>
     </footer>
@@ -671,16 +464,19 @@ function Footer() {
 
 export default function Home() {
   return (
-    <main>
-      <Hero />
-      <Problem />
-      <HowItWorks />
-      <RoutingTrace />
-      <Benchmarks />
-      <Integrations />
-      <OpenSource />
-      <Roadmap />
+    <>
+      <Nav />
+      <main>
+        <Hero />
+        <Problem />
+        <HowItWorks />
+        <RoutingTrace />
+        <Benchmarks />
+        <Integrations />
+        <OpenSource />
+        <Roadmap />
+      </main>
       <Footer />
-    </main>
+    </>
   );
 }
