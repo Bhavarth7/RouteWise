@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "RouteWise — Open-Source Step-Level Router for AI Agents",
   description:
-    "Open-source AI workflow router that decomposes tasks, selects the best model and tools for each step in Claude Code, Cursor, MCP agents, and multi-model AI workflows.",
+    "Open-source AI workflow router that decomposes tasks, selects the best model and tools for each step in Claude Code, Cursor, MCP agents, and multi-model AI workflows. Step-level routing with full execution traces.",
   keywords: [
     "AI workflow router",
     "agent routing",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "RouteWise: Open-Source Step-Level Router for AI Agents",
     description:
-      "Decompose workflows, route each step to the best model, evaluate outputs, generate execution traces.",
+      "Decompose workflows, route each step to the best model, evaluate outputs, generate execution traces. Works with Claude Code, Cursor, MCP.",
     type: "website",
     url: "https://routewise.dev",
   },
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "RouteWise — AI Workflow Router",
     description:
-      "Stop choosing AI models manually. RouteWise routes each step to the best model automatically.",
+      "Stop routing AI work manually. RouteWise selects the best model for each step automatically.",
   },
 };
 
@@ -51,10 +51,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="en" className="scroll-smooth">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {children}
       </body>
     </html>
