@@ -1,0 +1,55 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# RouteWise runtime data
+.routewise/
+.routstr/
+
+# Environment & secrets
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+
+# Test coverage
+coverage/
+
+# Package tarballs
+*.tgz
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Cache
+.ruff_cache/
+.pytest_cache/
+__pycache__/
+*.pyc
+
+# Biome cache (if any)
+.biome/
+
+# TypeScript incremental
+*.tsbuildinfo
+
+# pnpm workspace (single package)
+pnpm-workspace.yaml
